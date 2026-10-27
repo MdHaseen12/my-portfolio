@@ -201,6 +201,7 @@ const projectData = [
 projectCards.forEach((card, index) => {
 
     card.addEventListener("click", () => {
+        console.log("Project card clicked!");
 
         const project = projectData[index];
 
@@ -233,6 +234,7 @@ projectCards.forEach((card, index) => {
     });
 
         projectModal.classList.add("show");
+        console.log("Modal classes:", projectModal.className);
 
     });
 

@@ -3,19 +3,17 @@ import { Moon, Sun } from "lucide-react";
 
 function ThemeToggle() {
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("theme") === "dark";
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      return savedTheme === "dark";
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
   useEffect(() => {
-    document.documentElement.classList.toggle(
-      "dark",
-      darkMode
-    );
-
-    localStorage.setItem(
-      "theme",
-      darkMode ? "dark" : "light"
-    );
+    document.documentElement.classList.toggle("dark", darkMode);
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
   return (
@@ -24,11 +22,7 @@ function ThemeToggle() {
       onClick={() => setDarkMode((current) => !current)}
       aria-label="Toggle theme"
     >
-      {darkMode ? (
-        <Sun size={18} />
-      ) : (
-        <Moon size={18} />
-      )}
+      {darkMode ? <Sun size={18} /> : <Moon size={18} />}
     </button>
   );
 }

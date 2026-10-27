@@ -1,5 +1,5 @@
-import { ArrowUpRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 function StatsCard({ title, value, change, description }) {
   return (
@@ -8,16 +8,18 @@ function StatsCard({ title, value, change, description }) {
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="stats-top">
+      <div className="stats-card-top">
         <span>{title}</span>
-        <ArrowUpRight size={17} />
+        <div className="stats-icon">
+          <ArrowUpRight size={17} />
+        </div>
       </div>
 
-      <h3>{value}</h3>
+      <h2>{value}</h2>
 
-      <div className="stats-bottom">
-        <span className="positive">{change}</span>
-        <span className="description">{description}</span>
+      <div className="stats-card-bottom">
+        <span className="stats-change">{change}</span>
+        <span className="stats-description">{description}</span>
       </div>
     </motion.div>
   );

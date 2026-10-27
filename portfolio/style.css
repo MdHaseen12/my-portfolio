@@ -90,7 +90,12 @@ body {
     color: #ffffff;
 }
 
-.navbar nav a:hover::after {
+.navbar nav a.active {
+    color: #ffffff;
+}
+
+.navbar nav a:hover::after,
+.navbar nav a.active::after {
     width: 100%;
 }
 
@@ -312,30 +317,39 @@ body {
 
 .projects-container {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 20px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+    align-items: stretch;
 }
 
 .project-card {
-    cursor: pointer;
-    padding: 30px;
-
-    background: rgba(21, 21, 31, 0.7);
-
-    border: 1px solid #292936;
-
-    border-radius: 18px;
-
     position: relative;
-
     overflow: hidden;
 
-    transition: all 0.4s ease;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
 
-    backdrop-filter: blur(10px);
+    padding: 26px;
+
+    background: rgba(21, 21, 31, 0.8);
+    border: 1px solid #292936;
+    border-radius: 18px;
+
+    transition: 0.3s ease;
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 900px) {
+    .projects-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .projects-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 .project-card::before {
@@ -1010,8 +1024,21 @@ footer {
 ========================= */
 
 .availability-badge {
-    .availability-badge {
+    display: inline-block;
+
+    margin-bottom: 18px;
+    padding: 8px 14px;
+
+    background: rgba(124, 92, 255, 0.1);
+    border: 1px solid rgba(124, 92, 255, 0.3);
+    border-radius: 30px;
+
+    color: #b8aaff;
     text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+
     transition: all 0.3s ease;
 }
 
@@ -1019,24 +1046,6 @@ footer {
     background: rgba(124, 92, 255, 0.2);
     border-color: #7c5cff;
     transform: translateY(-2px);
-}
-    display: inline-block;
-
-    margin-bottom: 18px;
-    padding: 8px 14px;
-
-    background: rgba(124, 92, 255, 0.1);
-
-    border: 1px solid rgba(124, 92, 255, 0.3);
-
-    border-radius: 30px;
-
-    color: #b8aaff;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    letter-spacing: 0.3px;
 }
 #about p {
     max-width: 800px;
@@ -1224,4 +1233,14 @@ footer {
 .project-card:hover .project-action {
     color: #ffffff;
     transform: translateX(5px);
+}
+.project-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.project-card .project-action {
+    margin-top: auto;
+    padding-top: 18px;
 }

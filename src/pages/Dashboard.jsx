@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-
+import { getHealth } from "../api";
 import StatsCard from "../components/StatsCard";
 import RevenueChart from "../components/RevenueChart";
 import InvoiceTable from "../components/InvoiceTable";
@@ -10,45 +10,48 @@ import RecentActivity from "../components/RecentActivity";
 import PaymentOverview from "../components/PaymentOverview";
 
 function Dashboard() {
-  const [selectedInvoice, setSelectedInvoice] = useState(
-    null
-  );
-  
-<div className="stats-grid"></div>
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [backendStatus, setBackendStatus] = useState("checking");
 
-useEffect(() => {
-  getHealth()
-    .then((data) => {
-      setBackendStatus(data.status);
-    })
-    .catch(() => {
-      setBackendStatus("offline");
-    });
-}, []);
-<div className="stats-grid">
-  
-</div>
+  useEffect(() => {
+    let isMounted = true;
+
+    getHealth()
+      .then((data) => {
+        if (isMounted) {
+          setBackendStatus(data.status === "healthy" ? "healthy" : "offline");
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setBackendStatus("offline");
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <motion.section
-  className="dashboard"
-  initial={{
-    opacity: 0,
-    y: 10,
-  }}
-  animate={{
-    opacity: 1,
-    y: 0,
-  }}
-  transition={{
-    duration: 0.35,
-  }}
->
-    
-
+      className="dashboard"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+    >
+      <div className="dashboard-header-bar">
+        <div className="dashboard-status-pill">
+          <span className={`status-dot ${backendStatus}`} />
+          {backendStatus === "healthy"
+            ? "API online"
+            : backendStatus === "offline"
+              ? "API offline"
+              : "Checking API..."}
+        </div>
+      </div>
 
       <div className="stats-grid">
-
         <StatsCard
           title="Overdue"
           value="₹24,850"
@@ -76,15 +79,11 @@ useEffect(() => {
           change="+14.8%"
           description="from last month"
         />
-
       </div>
-
 
       <RevenueChart />
 
-
       <div className="invoice-layout">
-
         <InvoiceTable
           selectedInvoice={selectedInvoice}
           onSelectInvoice={setSelectedInvoice}
@@ -94,16 +93,12 @@ useEffect(() => {
           invoice={selectedInvoice}
           onClose={() => setSelectedInvoice(null)}
         />
-
       </div>
+
       <div className="analytics-bottom">
-
-  <RecentActivity />
-
-  <PaymentOverview />
-
-</div>
-
+        <RecentActivity />
+        <PaymentOverview />
+      </div>
     </motion.section>
   );
 }
